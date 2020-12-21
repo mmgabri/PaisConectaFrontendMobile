@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "41957340157",
+    "project_id": "paisconecta-44403",
+    "storage_bucket": "paisconecta-44403.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41957340157:android:ec3cf6ab2fef9596fcdf94",
+        "android_client_info": {
+          "package_name": "com.paisconectafrontendmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41957340157-ql2v6oc0ned6v0qocneb9187067bdebh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFBntfIcEY8b_AUhubb2j0BWCzjne7k7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41957340157-ql2v6oc0ned6v0qocneb9187067bdebh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
