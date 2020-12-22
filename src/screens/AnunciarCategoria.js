@@ -18,7 +18,7 @@ const AnunciarCategoria = ({ route, navigation }) => {
 
         console.log(anuncio)
 
-        //    navigation.navigate('AnunciarDescricao', { anuncio: anuncio, });
+        navigation.navigate('AnunciarImagens', { anuncio: anuncio, });
     }
 
     return (

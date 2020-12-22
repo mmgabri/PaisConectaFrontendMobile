@@ -12,7 +12,7 @@ import AnunciarTitulo from '../screens/AnunciarTitulo'
 import AnunciarDescricao from '../screens/AnunciarDescricao'
 import AnunciarCategoria from '../screens/AnunciarCategoria'
 import AnunciarImagens from '../screens/AnunciarImagens'
-
+import AnunciarConfirm from '../screens/AnunciarConfirm'
 
 const Stack = createStackNavigator();
 
@@ -60,9 +60,17 @@ const AnunciarStackNavigator = () => {
         options={{
           title: 'Anunciar - Categoria',
         }} />
-        <Stack.Screen name="AnunciarImagens" component={AnunciarImagens}
+      <Stack.Screen name="AnunciarImagens" component={AnunciarImagens}
         options={{
-          title: 'Anunciar - Upload de imagens',
+          title: 'Anunciar - Imagens',
+        }} />
+      <Stack.Screen name="AnunciarConfirm" component={AnunciarConfirm}
+        options={{
+          title: 'Anunciar - Confirm',
+        }} />
+              <Stack.Screen name="Home" component={Home}
+        options={{
+          title: 'Home',
         }} />
     </Stack.Navigator>
   );

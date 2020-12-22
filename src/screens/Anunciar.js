@@ -17,6 +17,16 @@ import { useTheme } from 'react-native-paper';
 
 const Anunciar = ({ navigation }) => {
   const { colors } = useTheme();
+
+  var anuncio = {
+    titulo: '',
+    descricao: '',
+    finalidade: '',
+    categoria: '',
+    valor: 0,
+    images: []
+}
+
   return (
 
     <View style={styles.container}>
@@ -43,7 +53,7 @@ const Anunciar = ({ navigation }) => {
         <View style={styles.button}>
           <TouchableOpacity
             style={styles.signIn}
-            onPress={() => navigation.navigate('AnunciarImagens')}
+            onPress={() => navigation.navigate('AnunciarTitulo', { anuncio: anuncio, })}
           >
             <LinearGradient
               colors={['#08d4c4', '#01ab9d']}

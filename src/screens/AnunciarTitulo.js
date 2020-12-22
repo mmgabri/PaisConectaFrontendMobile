@@ -6,20 +6,13 @@ import { useTheme } from 'react-native-paper';
 
 import stylesCommon from '../components/stylesCommon'
 
-const AnunciarTitulo = ({ navigation }) => {
+const AnunciarTitulo = ({ route, navigation }) => {
     console.log('--- AnunciarTitulo --- ')
     const [isFocused, setIsFocused] = useState(false);
     const [input, setInput] = useState('');
     const [isMessageWarning, setIsMessageWarning] = useState(false);
     const [enableButton, setEnableButton] = useState(false);
-
-    var anuncio = {
-        titulo: '',
-        descricao: '',
-        finalidade: '',
-        categoria: '',
-        valor: 0
-    }
+    const { anuncio } = route.params;
 
     const { colors } = useTheme();
 

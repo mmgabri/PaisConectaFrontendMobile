@@ -10,8 +10,6 @@ import {
 
 import { SliderBox } from 'react-native-image-slider-box';
 import ImagePicker from 'react-native-image-crop-picker';
-import { uploadImage } from '../services/storageService';
-
 
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
@@ -21,28 +19,25 @@ import stylesCommon from '../components/stylesCommon'
 
 const width = Dimensions.get('window').width * 0.9;
 
-const AnunciarImagens = ({ navigation }) => {
+const AnunciarImagens = ({ route, navigation }) => {
     console.log('--- AnunciarDescricao --- ')
 
     const [images, setImages] = useState([]);
     const { colors } = useTheme();
 
+    const { anuncio } = route.params;
+
     const continuar = () => {
         console.log("continuar")
-
-        //        anuncio.descricao = input;
-
-        //     console.log(anuncio)
-
-        // if (input.length > 19) {
-        //     navigation.navigate('AnunciarCategoria', { anuncio: anuncio, });
-        // } else {
-        //     setIsMessageWarning(true)
-        //  }
+        anuncio.images = images;
+        navigation.navigate('AnunciarConfirm', { anuncio: anuncio, });
     }
 
     const onHadleSelectImageCamera = () => {
         console.log('onHadleSelectImage')
+
+        cleanPicker();
+
         ImagePicker.openCamera({
             width: 300,
             height: 400,
@@ -55,13 +50,13 @@ const AnunciarImagens = ({ navigation }) => {
                 base64: res.data
             })
             setImages(source);
-            console.log('source:' , source)
-            console.log('res:', res)
         })
     }
 
     const onHadleSelectImage = () => {
         console.log('onHadleSelectImage')
+
+        cleanPicker();
 
         ImagePicker.openPicker({
             width: 300,
@@ -76,33 +71,16 @@ const AnunciarImagens = ({ navigation }) => {
                 base64: data.data
             }));
             setImages(source);
-            console.log('source:' , source)
-            console.log('res:', res)
         })
     }
 
     const cleanPicker = () => {
+        setImages([]);
         ImagePicker.clean().then(() => {
-            console.log('removed all tmp images from tmp directory');
-        }).catch(e => {
-            alert(e);
+        }).catch(error => {
+            console.log("cleanPicker:", error )
         });
     }
-
-    const onHandleSubmit = async () => {
-        const picsUrls = [];
-        await sendingImageArray(images)
-            .then(urls => picsUrls.push(...urls))
-            .catch(err => console.log(err));
-
-        console.log(picsUrls);
-    };
-
-    const sendingImageArray = async (images) => {
-        console.log('sendingImageArray')
-        return Promise.all(images.map(image => uploadImage(image.base64)));
-    }
-
 
     return (
 
@@ -114,9 +92,10 @@ const AnunciarImagens = ({ navigation }) => {
                     backgroundColor: colors.background
                 }]}
             >
-                <Text style={[stylesCommon.text_footer, {
-                    color: colors.text
-                }]}>Faça upload de imagens do seu anúncio</Text>
+                {images.length == 0 &&
+                    <Text style={[stylesCommon.text_footer, {
+                        color: colors.text
+                    }]}>Você tem imagens do anúncio?</Text>}
 
 
 
@@ -127,23 +106,39 @@ const AnunciarImagens = ({ navigation }) => {
                         ImageComponentStyle={{ height: 300, width: width }} />
                 </View>
 
-                <View style={styles.buttonsContainer}>
 
-                    <TouchableOpacity onPress={onHadleSelectImage} style={styles.buttonStyle}>
-                        <Text style={styles.textButton}>Escolher Imagens na galeria</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={onHadleSelectImageCamera} style={styles.buttonStyle}>
-                        <Text style={styles.textButton}>Tirar uma foto</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={onHandleSubmit} style={styles.buttonStyle}>
-                        <Text style={styles.textButton}>Enviar</Text>
+                <View style={stylesCommon.action}>
+                    <TouchableOpacity
+                        onPress={onHadleSelectImage}
+                        style={[stylesCommon.button_styte, {
+                            borderColor: '#009387',
+                            borderWidth: 1,
+                            marginTop: 0
+                        }]}
+                    >
+                        <Text style={[stylesCommon.button_text, {
+                            color: '#009387'
+                        }]}>Escolher na galeria</Text>
                     </TouchableOpacity>
                 </View>
 
 
-                <View style={stylesCommon.button}>
+                <View style={stylesCommon.action, { marginTop: 1 }}>
+                    <TouchableOpacity
+                        onPress={onHadleSelectImageCamera}
+                        style={[stylesCommon.button_styte, {
+                            borderColor: '#009387',
+                            borderWidth: 1,
+                            marginTop: 2
+                        }]}
+                    >
+                        <Text style={[stylesCommon.button_text, {
+                            color: '#009387'
+                        }]}>Tirar uma foto</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={stylesCommon.action, { marginTop: 28 }}>
                     <TouchableOpacity
                         style={stylesCommon.button_styte}
                         onPress={() => { continuar() }}
@@ -164,39 +159,13 @@ const AnunciarImagens = ({ navigation }) => {
     );
 };
 
-
 export default AnunciarImagens;
 
-
-
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-    },
     imageViewContainer: {
         margin: 15,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center'
     },
-    buttonsContainer: {
-        height: '30%',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: width,
-    },
-    buttonStyle: {
-        height: 40,
-        width: '50%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#4287f5',
-        borderRadius: 5,
-    },
-    textButton: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#FFF',
-    }
 })
