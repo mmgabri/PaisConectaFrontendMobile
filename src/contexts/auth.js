@@ -1,8 +1,9 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useRef } from 'react';
+import { StyleSheet } from 'react-native';
 import { Alert } from 'react-native'
 import auth from '@react-native-firebase/auth';
-import apiUsuario from '../services/apiUsuario';
-
+import {apiUsuario, apiAnuncio}  from '../services/api';
+import DropdownAlert from 'react-native-dropdownalert';
 
 const AuthContext = createContext({
     isAuthenticated: false,
@@ -15,10 +16,13 @@ const AuthProvider = ({ children, navigation }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [queueSize, setQueueSize] = useState(0);
+    let dropDownAlertRef = useRef(null);
 
     useEffect(() => {
-        console.log('---- Entrou no useEffect ----')
+        console.log('--- Entrou no useEffect ---')
         apiUsuario.defaults.timeout = 5000;
+        apiAnuncio.defaults.timeout = 5000;
         const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
         return subscriber;
     }, [])
@@ -141,11 +145,43 @@ const AuthProvider = ({ children, navigation }) => {
         }
     }
 
+    function _showAlert(type, title, message, interval) {
+        console.log('_showAlertQueue')
+        dropDownAlertRef.alertWithType(type, title, message, {}, interval)
+    };
+
+    const _onClose = (data) => {
+        _updateQueueSize();
+    };
+    const _onCancel = (data) => {
+        _updateQueueSize();
+    };
+    const _onTap = (data) => {
+        _updateQueueSize();
+    };
+    const _updateQueueSize = () => {
+        setQueueSize(dropDownAlertRef.getQueueSize());
+    };
+
     return (
 
         <AuthContext.Provider
-            value={{ isAuthenticated, user, loading, signIn, signUp, signOut }}>
+            value={{ isAuthenticated, user, loading, signIn, signUp, signOut, _showAlert }}>
             {children}
+            <DropdownAlert
+                ref={(ref) => {
+                    if (ref) {
+                        dropDownAlertRef = ref;
+                    }
+                }}
+                containerStyle={styles.content}
+                showCancel={true}
+                onCancel={_onCancel}
+                onTap={_onTap}
+                titleNumOfLines={5}
+                messageNumOfLines={0}
+                onClose={_onClose}
+            />
         </AuthContext.Provider>
 
     );
@@ -162,3 +198,9 @@ function useAuth() {
 }
 
 export { AuthProvider, useAuth };
+
+const styles = StyleSheet.create({
+    content: {
+        backgroundColor: '#6441A4',
+    },
+});

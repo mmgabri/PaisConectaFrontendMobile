@@ -3,15 +3,12 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
   Platform,
   StyleSheet,
   StatusBar,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
 
 import { useTheme } from 'react-native-paper';
 
@@ -21,9 +18,11 @@ const Anunciar = ({ navigation }) => {
   var anuncio = {
     titulo: '',
     descricao: '',
-    finalidade: '',
+    tipo: '',
     categoria: '',
     valor: 0,
+    cep: '',
+    idUsuario: '',
     images: []
 }
 

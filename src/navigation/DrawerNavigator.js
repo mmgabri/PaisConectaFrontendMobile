@@ -6,10 +6,12 @@ import TabNavigator from './TabNavigator'
 
 const Drawer = createDrawerNavigator();
 
-const DrawerNavigator = () => {
+const DrawerNavigator = ({_showAlert = () => {}}) => {
+  console.log('--- DrawerNavigator ---', _showAlert)
+
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name="voltar" component={TabNavigator} />
+      <Drawer.Screen name="voltar" component={TabNavigator}  />
       <Drawer.Screen name="Mais" component={Mais} />
     </Drawer.Navigator>
   );

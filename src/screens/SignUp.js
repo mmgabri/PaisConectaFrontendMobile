@@ -198,6 +198,7 @@ const SignUp = ({ navigation }) => {
               size={20}
             />
             <TextInput
+              keyboardType="email-address"
               placeholder="seu email"
               style={styles.textInput}
               autoCapitalize="none"

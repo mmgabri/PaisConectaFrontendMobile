@@ -19,7 +19,7 @@ const Tab = createMaterialBottomTabNavigator();
 
 const TabNavigator = ({ navigation }) => {
   const { isAuthenticated, loading } = useAuth();
-  console.log('Entrou no TabNavigator')
+  console.log('--- TabNavigator ---')
   console.log('isAuthenticated:', isAuthenticated)
 
   return (

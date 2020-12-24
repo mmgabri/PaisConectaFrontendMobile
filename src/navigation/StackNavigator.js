@@ -1,5 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import { CommonActions } from '@react-navigation/native';
 
 import Mais from '../screens/Mais'
 import Home from '../screens/Home'
@@ -11,8 +12,12 @@ import Anunciar from '../screens/Anunciar'
 import AnunciarTitulo from '../screens/AnunciarTitulo'
 import AnunciarDescricao from '../screens/AnunciarDescricao'
 import AnunciarCategoria from '../screens/AnunciarCategoria'
+import AnunciarTipo from '../screens/AnunciarTipo'
+import AnunciarValor from '../screens/AnunciarValor'
+import AnunciarCep from '../screens/AnunciarCep'
 import AnunciarImagens from '../screens/AnunciarImagens'
 import AnunciarConfirm from '../screens/AnunciarConfirm'
+import MeusAnuncios from '../screens/MeusAnuncios'
 
 const Stack = createStackNavigator();
 
@@ -60,6 +65,18 @@ const AnunciarStackNavigator = () => {
         options={{
           title: 'Anunciar - Categoria',
         }} />
+      <Stack.Screen name="AnunciarTipo" component={AnunciarTipo}
+        options={{
+          title: 'Anunciar - Tipo',
+        }} />
+      <Stack.Screen name="AnunciarValor" component={AnunciarValor}
+        options={{
+          title: 'Anunciar - Valor',
+        }} />
+      <Stack.Screen name="AnunciarCep" component={AnunciarCep}
+        options={{
+          title: 'Anunciar - Cep',
+        }} />
       <Stack.Screen name="AnunciarImagens" component={AnunciarImagens}
         options={{
           title: 'Anunciar - Imagens',
@@ -68,7 +85,11 @@ const AnunciarStackNavigator = () => {
         options={{
           title: 'Anunciar - Confirm',
         }} />
-              <Stack.Screen name="Home" component={Home}
+      <Stack.Screen name="MeusAnuncios" component={MeusAnuncios}
+        options={{
+          title: 'Meus anúncios',
+        }} />
+      <Stack.Screen name="Home" component={Home}
         options={{
           title: 'Home',
         }} />

@@ -126,6 +126,7 @@ const SignIn = ({ navigation }) => {
             size={20}
           />
           <TextInput
+            keyboardType="email-address"
             placeholder="seu email"
             placeholderTextColor="#666666"
             style={[styles.textInput, {

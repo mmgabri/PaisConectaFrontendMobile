@@ -5,16 +5,21 @@ import { useTheme } from 'react-native-paper';
 
 import stylesCommon from '../components/stylesCommon'
 
-const AnunciarCategoria = ({ route, navigation }) => {
-    console.log('--- AnunciarCategoria --- ')
+const AnunciarTipo = ({ route, navigation }) => {
+    console.log('--- AnunciarTipo --- ')
 
     const { anuncio } = route.params;
     const { colors } = useTheme();
 
     const continuar = (val) => {
         console.log("continuar")
-        anuncio.categoria = val;
-        navigation.navigate('AnunciarTipo', { anuncio: anuncio, });
+        anuncio.tipo = val;
+        console.log(anuncio.tipo)
+        if (anuncio.tipo == 'VENDA') {
+            navigation.navigate('AnunciarValor', { anuncio: anuncio, });
+        } else {
+            navigation.navigate('AnunciarCep', { anuncio: anuncio, });
+        }
     }
 
     return (
@@ -29,11 +34,11 @@ const AnunciarCategoria = ({ route, navigation }) => {
             >
                 <Text style={[stylesCommon.text_footer, {
                     color: colors.text
-                }]}>Qual a categoria do seu anúncio?</Text>
+                }]}>Qual a finalidade do seu anúncio?</Text>
 
                 <View style={stylesCommon.action}>
                     <TouchableOpacity
-                        onPress={() => { continuar('UNIFORME') }}
+                        onPress={() => { continuar('VENDA') }}
                         style={[stylesCommon.button_styte, {
                             borderColor: '#009387',
                             borderWidth: 1,
@@ -42,14 +47,14 @@ const AnunciarCategoria = ({ route, navigation }) => {
                     >
                         <Text style={[stylesCommon.button_text, {
                             color: '#009387'
-                        }]}>Uniforme</Text>
+                        }]}>Venda</Text>
                     </TouchableOpacity>
                 </View>
 
 
                 <View style={stylesCommon.action, { marginTop: 1 }}>
                     <TouchableOpacity
-                        onPress={() => { continuar('LIVRO') }}
+                        onPress={() => { continuar('DOACAO') }}
                         style={[stylesCommon.button_styte, {
                             borderColor: '#009387',
                             borderWidth: 1,
@@ -58,22 +63,7 @@ const AnunciarCategoria = ({ route, navigation }) => {
                     >
                         <Text style={[stylesCommon.button_text, {
                             color: '#009387'
-                        }]}>Livro</Text>
-                    </TouchableOpacity>
-                </View>
-                
-                <View style={stylesCommon.action, { marginTop: 1 }}>
-                    <TouchableOpacity
-                        onPress={() => { continuar('MATERIAL_ESCOLAR') }}
-                        style={[stylesCommon.button_styte, {
-                            borderColor: '#009387',
-                            borderWidth: 1,
-                            marginTop: 18
-                        }]}
-                    >
-                        <Text style={[stylesCommon.button_text, {
-                            color: '#009387'
-                        }]}>Material escolar</Text>
+                        }]}>Doação</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -82,4 +72,4 @@ const AnunciarCategoria = ({ route, navigation }) => {
     );
 };
 
-export default AnunciarCategoria;
+export default AnunciarTipo;
