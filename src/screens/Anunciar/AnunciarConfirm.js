@@ -7,11 +7,11 @@ import { SliderBox } from 'react-native-image-slider-box';
 import AwesomeLoading from 'react-native-awesome-loading';
 import { CommonActions } from '@react-navigation/native';
 
-import { enunsTipoAnuncio, enunsTipoCategoria } from '../services/enuns'
-import { useAuth } from '../contexts/auth';
-import { apiAnuncio } from '../services/api';
-import stylesCommon from '../components/stylesCommon'
-import { uploadImage } from '../services/storageService';
+import { enunsTipoAnuncio, enunsTipoCategoria } from '../../services/enuns'
+import { useAuth } from '../../contexts/auth';
+import { apiAnuncio } from '../../services/api';
+import stylesCommon from '../../components/stylesCommon'
+import { uploadImage } from '../../services/storageService';
 import { useState } from 'react';
 
 const width = Dimensions.get('window').width * 0.9;
@@ -40,6 +40,7 @@ const AnunciarConfirm = ({ route, navigation }) => {
     const publicarAnuncio = () => {
         console.log('publicar anuncio')
         setIsLoading(true);
+
         const anuncioObject = {
             titulo: '',
             descricao: '',
@@ -55,19 +56,22 @@ const AnunciarConfirm = ({ route, navigation }) => {
         anuncioObject.descricao = anuncio.descricao;
         anuncioObject.tipo = anuncio.tipo;
         anuncioObject.categoria = anuncio.categoria;
-        anuncioObject.valor = anuncio.valor;
         anuncioObject.cep = anuncio.cep;
         anuncioObject.idUsuario = user.uid;
 
+        if (anuncio.valor == 0) {
+            anuncioObject.valor = anuncio.valor
+        }else{
+            anuncioObject.valor = anuncio.valor.replace(/[^0-9,]*/g, '').replace(',', '.'); 
+        }
+
+
         onHandleSubmit()
             .then((picsUrls) => {
-                console.log('UPLOAD CONCLUIDO:', picsUrls)
                 anuncioObject.imagens = picsUrls;
-                console.log('anuncioObject:', anuncioObject)
                 apiAnuncio.post('/anuncios', anuncioObject)
                     .then(() => {
                         setIsLoading(false);
-                        console.log('Chamada da apiAnuncio com sucesso')
                         _showAlert('success', 'Anúncio publicado com sucesso', '', 3000);
                         navigation.dispatch(CommonActions.reset({
                             index: 1, routes: [
@@ -83,7 +87,6 @@ const AnunciarConfirm = ({ route, navigation }) => {
             })
             .catch(error => {
                 setIsLoading(false);
-                console.log('UPLOAD COM ERRO:', error)
                 _showAlert('error', 'Ooops!', `Algo deu errado. ` + error, 7000);
             })
     }

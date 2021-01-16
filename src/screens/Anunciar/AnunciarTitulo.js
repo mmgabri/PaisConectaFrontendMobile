@@ -4,22 +4,23 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from 'react-native-paper';
 
-import stylesCommon from '../components/stylesCommon'
+import stylesCommon from '../../components/stylesCommon'
 
-const AnunciarDescricao = ({ route, navigation }) => {
-    console.log('--- AnunciarDescricao --- ')
+const AnunciarTitulo = ({ route, navigation }) => {
+    console.log('--- AnunciarTitulo --- ', route.params)
 
     const [isFocused, setIsFocused] = useState(false);
     const [input, setInput] = useState('');
     const [isMessageWarning, setIsMessageWarning] = useState(false);
     const [enableButton, setEnableButton] = useState(false);
     const { anuncio } = route.params;
+
     const { colors } = useTheme();
 
     const handleInputChange = (val) => {
         setInput(val);
         setIsMessageWarning(false)
-        if (val.length > 20) {
+        if (val.length > 5) {
             setEnableButton(true)
         } else {
             setEnableButton(false)
@@ -29,16 +30,22 @@ const AnunciarDescricao = ({ route, navigation }) => {
     const continuar = () => {
         console.log("continuar")
 
-        anuncio.descricao = input;
+        anuncio.titulo = input;
 
-        console.log(anuncio)
-
-        if (input.length > 19) {
-                navigation.navigate('AnunciarCategoria', { anuncio: anuncio, });
+        if (input.length > 5) {
+            navigation.navigate('AnunciarDescricao', { anuncio: anuncio, });
         } else {
             setIsMessageWarning(true)
         }
     }
+
+    useEffect(() => {
+        setInput(anuncio.titulo)
+        if (anuncio) {
+            setIsMessageWarning(false)
+            setEnableButton(true)
+        }
+    }, [])
 
     return (
 
@@ -52,10 +59,9 @@ const AnunciarDescricao = ({ route, navigation }) => {
             >
                 <Text style={[stylesCommon.text_footer, {
                     color: colors.text
-                }]}>Conte mais sobre o seu anúncio</Text>
+                }]}>Dê um título para o seu anúncio</Text>
 
                 <View style={stylesCommon.action}>
-
                     <TextInput
                         onFocus={() => setIsFocused(true)}
                         selectionColor="#009387"
@@ -65,20 +71,19 @@ const AnunciarDescricao = ({ route, navigation }) => {
                         style={[stylesCommon.textInput, {
                             color: colors.text
                         }]}
-                        multiline={true}
-                        numberOfLines={5}
                         autoCapitalize="none"
+                        value={input}
                         onChangeText={(val) => handleInputChange(val)}
                     />
                 </View>
 
                 {isMessageWarning ?
                     <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={stylesCommon.errorMsg}>entre 20 e 140 caracteres</Text>
+                        <Text style={stylesCommon.errorMsg}>entre 6 e 40 caracteres</Text>
                     </Animatable.View>
                     :
                     <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={stylesCommon.infoMsg}>entre 20 e 140 caracteres</Text>
+                        <Text style={stylesCommon.infoMsg}>entre 6 e 40 caracteres</Text>
                     </Animatable.View>
                 }
 
@@ -120,4 +125,4 @@ const AnunciarDescricao = ({ route, navigation }) => {
     );
 };
 
-export default AnunciarDescricao;
+export default AnunciarTitulo;

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StatusBar } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { useTheme } from 'react-native-paper';
 
-import stylesCommon from '../components/stylesCommon'
+import stylesCommon from '../../components/stylesCommon'
 
 const AnunciarTipo = ({ route, navigation }) => {
     console.log('--- AnunciarTipo --- ')

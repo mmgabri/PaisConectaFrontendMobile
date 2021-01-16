@@ -5,10 +5,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from 'react-native-paper';
 import { TextInputMask } from 'react-native-masked-text'
 
-import stylesCommon from '../components/stylesCommon'
+import stylesCommon from '../../components/stylesCommon'
 
-const AnunciarValor = ({ route, navigation }) => {
-    console.log('--- AnunciarValor --- ')
+const AnunciarCep = ({ route, navigation }) => {
+    console.log('--- AnunciarCep --- ')
     const [isFocused, setIsFocused] = useState(false);
     const [input, setInput] = useState('');
     const [isMessageWarning, setIsMessageWarning] = useState(false);
@@ -20,7 +20,8 @@ const AnunciarValor = ({ route, navigation }) => {
     const handleInputChange = (val) => {
         setInput(val);
         setIsMessageWarning(false)
-        if (val.length > 0) {
+
+        if (val.length > 8) {
             setEnableButton(true)
         } else {
             setEnableButton(false)
@@ -29,13 +30,21 @@ const AnunciarValor = ({ route, navigation }) => {
 
     const continuar = () => {
         console.log("continuar")
-        anuncio.valor = input;
-        if (input.length > 0) {
-            navigation.navigate('AnunciarCep', { anuncio: anuncio, });
+        anuncio.cep = input;
+        if (input.length > 8) {
+            navigation.navigate('AnunciarImagens', { anuncio: anuncio, });
         } else {
             setIsMessageWarning(true)
         }
     }
+
+    useEffect(() => {
+        setInput(anuncio.cep)
+        if (anuncio) {
+            setIsMessageWarning(false)
+            setEnableButton(true)
+        }
+    }, [])
 
     return (
 
@@ -49,18 +58,11 @@ const AnunciarValor = ({ route, navigation }) => {
             >
                 <Text style={[stylesCommon.text_footer, {
                     color: colors.text
-                }]}>Qual valor pretende vender?</Text>
+                }]}>Qual o seu CEP?</Text>
 
                 <View style={stylesCommon.action}>
-                <TextInputMask
-                        type={'money'}
-                        options={{
-                            precision: 2,
-                            separator: ',',
-                            delimiter: '.',
-                            unit: 'R$',
-                            suffixUnit: ''
-                          }}
+                    <TextInputMask
+                        type={'zip-code'}
                         keyboardType="numeric"
                         onFocus={() => setIsFocused(true)}
                         selectionColor="#009387"
@@ -72,13 +74,13 @@ const AnunciarValor = ({ route, navigation }) => {
                         }]}
                         autoCapitalize="none"
                         value={input}
-                        onChangeText={(val) => handleInputChange(val)}
-                    />
+                        onChangeText={(val) => handleInputChange(val)}>
+                    </TextInputMask>
                 </View>
 
                 {isMessageWarning &&
                     <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={stylesCommon.errorMsg}>digite um valor 1válido</Text>
+                        <Text style={stylesCommon.errorMsg}>cep inválido</Text>
                     </Animatable.View>
                 }
 
@@ -120,4 +122,4 @@ const AnunciarValor = ({ route, navigation }) => {
     );
 };
 
-export default AnunciarValor;
+export default AnunciarCep;

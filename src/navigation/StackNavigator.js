@@ -8,15 +8,15 @@ import Buscar from '../screens/Buscar'
 import Mensagens from '../screens/Mensagens'
 import SignIn from '../screens/SignIn'
 import SignUp from '../screens/SignUp'
-import Anunciar from '../screens/Anunciar'
-import AnunciarTitulo from '../screens/AnunciarTitulo'
-import AnunciarDescricao from '../screens/AnunciarDescricao'
-import AnunciarCategoria from '../screens/AnunciarCategoria'
-import AnunciarTipo from '../screens/AnunciarTipo'
-import AnunciarValor from '../screens/AnunciarValor'
-import AnunciarCep from '../screens/AnunciarCep'
-import AnunciarImagens from '../screens/AnunciarImagens'
-import AnunciarConfirm from '../screens/AnunciarConfirm'
+import Anunciar from '../screens/anunciar/Anunciar'
+import AnunciarTitulo from '../screens/anunciar/AnunciarTitulo'
+import AnunciarDescricao from '../screens/anunciar/AnunciarDescricao'
+import AnunciarCategoria from '../screens/anunciar/AnunciarCategoria'
+import AnunciarTipo from '../screens/anunciar/AnunciarTipo'
+import AnunciarValor from '../screens/anunciar/AnunciarValor'
+import AnunciarCep from '../screens/anunciar/AnunciarCep'
+import AnunciarImagens from '../screens/anunciar/AnunciarImagens'
+import AnunciarConfirm from '../screens/anunciar/AnunciarConfirm'
 import MeusAnuncios from '../screens/MeusAnuncios'
 
 const Stack = createStackNavigator();
@@ -31,7 +31,16 @@ const screenOptionStyle = {
 
 const HomeStackNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={screenOptionStyle}>
+    <Stack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#009387',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold'
+      }
+    }
+    }>
       <Stack.Screen name="Home" component={Home} />
     </Stack.Navigator>
   );
@@ -115,11 +124,60 @@ const MensagensStackNavigator = () => {
 
 const MaisStackNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Mais" component={Mais} />
+    <Stack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#009387',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold'
+      }
+    }
+    }>
+      <Stack.Screen name="Mais" component={Mais}
+        options={{
+          title: 'Mais',
+        }} />
+      <Stack.Screen name="AnunciarTitulo" component={AnunciarTitulo}
+        options={{
+          title: 'Anunciar - Titulo',
+        }} />
+      <Stack.Screen name="AnunciarDescricao" component={AnunciarDescricao}
+        options={{
+          title: 'Anunciar - Descrição',
+        }} />
+      <Stack.Screen name="AnunciarCategoria" component={AnunciarCategoria}
+        options={{
+          title: 'Anunciar - Categoria',
+        }} />
+      <Stack.Screen name="AnunciarTipo" component={AnunciarTipo}
+        options={{
+          title: 'Anunciar - Tipo',
+        }} />
+      <Stack.Screen name="AnunciarValor" component={AnunciarValor}
+        options={{
+          title: 'Anunciar - Valor',
+        }} />
+      <Stack.Screen name="AnunciarCep" component={AnunciarCep}
+        options={{
+          title: 'Anunciar - Cep',
+        }} />
+      <Stack.Screen name="AnunciarImagens" component={AnunciarImagens}
+        options={{
+          title: 'Anunciar - Imagens',
+        }} />
+      <Stack.Screen name="AnunciarConfirm" component={AnunciarConfirm}
+        options={{
+          title: 'Anunciar - Confirm',
+        }} />
+      <Stack.Screen name="MeusAnuncios" component={MeusAnuncios}
+        options={{
+          title: 'Meus anúncios',
+        }} />
     </Stack.Navigator>
   );
 }
+
 
 const SignInStackNavigator = () => {
   return (

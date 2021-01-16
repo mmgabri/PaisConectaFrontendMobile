@@ -15,7 +15,7 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from 'react-native-paper';
 
-import stylesCommon from '../components/stylesCommon'
+import stylesCommon from '../../components/stylesCommon'
 
 const width = Dimensions.get('window').width * 0.9;
 
@@ -81,6 +81,14 @@ const AnunciarImagens = ({ route, navigation }) => {
             console.log("cleanPicker:", error )
         });
     }
+
+    useEffect(() => {
+        setImages(anuncio.imagens)
+        if (anuncio) {
+            setIsMessageWarning(false)
+            setEnableButton(true)
+        }
+    }, [])
 
     return (
 

@@ -16,6 +16,7 @@ const Anunciar = ({ navigation }) => {
   const { colors } = useTheme();
 
   var anuncio = {
+    id: '',
     titulo: '',
     descricao: '',
     tipo: '',
