@@ -22,14 +22,15 @@ const width = Dimensions.get('window').width * 0.9;
 const AnunciarImagens = ({ route, navigation }) => {
     console.log('--- AnunciarDescricao --- ')
 
-    const [images, setImages] = useState([]);
+    const [imagens, setImagens] = useState([]);
     const { colors } = useTheme();
 
     const { anuncio } = route.params;
+    console.log("anuncio id:", anuncio.id)
 
     const continuar = () => {
         console.log("continuar")
-        anuncio.images = images;
+        anuncio.imagens = imagens;
         navigation.navigate('AnunciarConfirm', { anuncio: anuncio, });
     }
 
@@ -49,7 +50,8 @@ const AnunciarImagens = ({ route, navigation }) => {
                 uri: res.path,
                 base64: res.data
             })
-            setImages(source);
+            anuncio.imagensDevice = true;
+            setImagens(source);
         })
     }
 
@@ -70,23 +72,26 @@ const AnunciarImagens = ({ route, navigation }) => {
                 uri: data.path,
                 base64: data.data
             }));
-            setImages(source);
+            anuncio.imagensDevice = true;
+            setImagens(source);
         })
     }
 
     const cleanPicker = () => {
-        setImages([]);
+        setImagens([]);
         ImagePicker.clean().then(() => {
         }).catch(error => {
-            console.log("cleanPicker:", error )
+            console.log("cleanPicker:", error)
         });
     }
 
     useEffect(() => {
-        setImages(anuncio.imagens)
-        if (anuncio) {
-            setIsMessageWarning(false)
-            setEnableButton(true)
+        console.log('useEffect')
+
+        if (anuncio.id){
+            console.log("Alteração do anúncio")
+            setImagens(anuncio.imagens)
+            anuncio.imagensDevice = false
         }
     }, [])
 
@@ -100,20 +105,18 @@ const AnunciarImagens = ({ route, navigation }) => {
                     backgroundColor: colors.background
                 }]}
             >
-                {images.length == 0 &&
+
+                {imagens.length == 0 &&
                     <Text style={[stylesCommon.text_footer, {
                         color: colors.text
                     }]}>Você tem imagens do anúncio?</Text>}
 
-
-
                 <View style={styles.imageViewContainer}>
                     <SliderBox resizeMethod={'resize'}
-                        images={images}
+                        images={imagens}
                         parentWidth={width}
                         ImageComponentStyle={{ height: 300, width: width }} />
                 </View>
-
 
                 <View style={stylesCommon.action}>
                     <TouchableOpacity

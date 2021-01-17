@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect, useContext, useRef } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, StatusBar } from "react-native";
+import React, { useState, useEffect } from 'react';
+import { View, Alert, StyleSheet, StatusBar } from "react-native";
 import * as Animatable from 'react-native-animatable';
 import { useTheme } from 'react-native-paper';
 import stylesCommon from '../components/stylesCommon'
@@ -14,6 +14,10 @@ const MeusAnuncios = ({ navigation }) => {
     const [anuncio, setAnuncio] = useState([]);
     const { colors } = useTheme();
 
+    function finalizar(item) {
+        console.log('finalizar - ', item)
+    }
+
 
     function editar(item) {
         console.log('editar - ', item)
@@ -22,22 +26,38 @@ const MeusAnuncios = ({ navigation }) => {
 
     function excluir(item) {
         console.log('excluir - ', item)
+
+        Alert.alert(
+            "Confirma esclusão ?", "",
+            [
+                {
+                    text: "Sim",
+                    onPress: () => deleteItem(item),
+                    style: "cancel"
+                },
+                {
+                    text: "Não"
+                }
+            ],
+            { cancelable: false }
+        );
+    }
+
+    function deleteItem(item) {
+        console.log('deleteItem')
+
         apiAnuncio.delete(`/anuncios/${item.id}`)
-            .then((respose) => {
+            .then(() => {
                 _showAlert('success', 'Anúncio excluido com sucesso', '', 3000);
+                getItens();
             })
             .catch((error) => {
                 _showAlert('error', 'Ooops!', `Algo deu errado. ` + error, 7000);
             });
     }
 
-    function finalizar(item) {
-        console.log('finalizar - ', item)
-    }
-
-    useEffect(() => {
-        console.log('useEffect')
-
+    function getItens() {
+        console.log("getItens")
         apiAnuncio.get(`/anuncios/user/${user.uid}`)
             .then((response) => {
                 console.log('Anúncios: ', response.data)
@@ -46,6 +66,19 @@ const MeusAnuncios = ({ navigation }) => {
             .catch((error) => {
                 _showAlert('error', 'Ooops!', `Algo deu errado. ` + error, 7000);
             });
+
+    }
+
+    function onClick(item) {
+        console.log('onClick - ', item)
+        navigation.navigate('Anuncio', { anuncio: item, });
+    }
+    
+
+    useEffect(() => {
+        console.log('useEffect')
+
+        getItens();
 
     }, [])
 
@@ -65,6 +98,7 @@ const MeusAnuncios = ({ navigation }) => {
                     editar={editar}
                     excluir={excluir}
                     finalizar={finalizar}
+                    onClick={onClick}
                 />
 
             </Animatable.View>

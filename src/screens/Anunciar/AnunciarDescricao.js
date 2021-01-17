@@ -34,7 +34,7 @@ const AnunciarDescricao = ({ route, navigation }) => {
         console.log(anuncio)
 
         if (input.length > 19) {
-                navigation.navigate('AnunciarCategoria', { anuncio: anuncio, });
+            navigation.navigate('AnunciarCategoria', { anuncio: anuncio, });
         } else {
             setIsMessageWarning(true)
         }
@@ -42,7 +42,7 @@ const AnunciarDescricao = ({ route, navigation }) => {
 
     useEffect(() => {
         setInput(anuncio.descricao)
-        if (anuncio) {
+        if (anuncio.id) {
             setIsMessageWarning(false)
             setEnableButton(true)
         }

@@ -41,7 +41,7 @@ const AnunciarTitulo = ({ route, navigation }) => {
 
     useEffect(() => {
         setInput(anuncio.titulo)
-        if (anuncio) {
+        if (anuncio.id) {
             setIsMessageWarning(false)
             setEnableButton(true)
         }

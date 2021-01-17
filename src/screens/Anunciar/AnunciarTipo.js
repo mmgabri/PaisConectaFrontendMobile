@@ -18,6 +18,7 @@ const AnunciarTipo = ({ route, navigation }) => {
         if (anuncio.tipo == 'VENDA') {
             navigation.navigate('AnunciarValor', { anuncio: anuncio, });
         } else {
+            anuncio.valor = 0;
             navigation.navigate('AnunciarCep', { anuncio: anuncio, });
         }
     }

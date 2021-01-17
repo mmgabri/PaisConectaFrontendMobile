@@ -13,9 +13,10 @@ const Home = ({ navigation }) => {
   const [anuncio, setAnuncio] = useState([]);
   const { colors } = useTheme();
 
-  //<TouchableOpacity style={{ height: 50, width: 50, justifyContent: "center", alignItems: "center" }}>
-  //<Text style={{ color: "green" }}>Call</Text>
-  //</TouchableOpacity>
+  function onClick(item) {
+    console.log('onClick - ', item)
+    navigation.navigate('Anuncio', { anuncio: item, });
+}
 
   useEffect(() => {
     console.log('useEffect')
@@ -41,7 +42,7 @@ const Home = ({ navigation }) => {
           backgroundColor: colors.background
         }]}
       >
-        <ListAnuncio anuncios={anuncio}></ListAnuncio>
+        <ListAnuncio anuncios={anuncio} onClick={onClick}></ListAnuncio>
 
       </Animatable.View>
 

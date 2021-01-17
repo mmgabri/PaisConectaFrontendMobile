@@ -18,6 +18,7 @@ import AnunciarCep from '../screens/anunciar/AnunciarCep'
 import AnunciarImagens from '../screens/anunciar/AnunciarImagens'
 import AnunciarConfirm from '../screens/anunciar/AnunciarConfirm'
 import MeusAnuncios from '../screens/MeusAnuncios'
+import Anuncio from '../screens/Anuncio'
 
 const Stack = createStackNavigator();
 
@@ -42,6 +43,10 @@ const HomeStackNavigator = () => {
     }
     }>
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Anuncio" component={Anuncio}
+        options={{
+          title: 'Anúncio',
+        }} />
     </Stack.Navigator>
   );
 }
@@ -97,6 +102,10 @@ const AnunciarStackNavigator = () => {
       <Stack.Screen name="MeusAnuncios" component={MeusAnuncios}
         options={{
           title: 'Meus anúncios',
+        }} />
+      <Stack.Screen name="Anuncio" component={Anuncio}
+        options={{
+          title: 'Meu anúncio',
         }} />
       <Stack.Screen name="Home" component={Home}
         options={{
@@ -173,6 +182,10 @@ const MaisStackNavigator = () => {
       <Stack.Screen name="MeusAnuncios" component={MeusAnuncios}
         options={{
           title: 'Meus anúncios',
+        }} />
+      <Stack.Screen name="Anuncio" component={Anuncio}
+        options={{
+          title: 'Meu anúncio',
         }} />
     </Stack.Navigator>
   );

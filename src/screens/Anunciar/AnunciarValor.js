@@ -5,6 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from 'react-native-paper';
 import { TextInputMask } from 'react-native-masked-text'
 
+import { formatValor } from '../../services/utils';
 import stylesCommon from '../../components/stylesCommon'
 
 const AnunciarValor = ({ route, navigation }) => {
@@ -20,6 +21,7 @@ const AnunciarValor = ({ route, navigation }) => {
     const handleInputChange = (val) => {
         setInput(val);
         setIsMessageWarning(false)
+
         if (val.length > 0) {
             setEnableButton(true)
         } else {
@@ -30,7 +32,11 @@ const AnunciarValor = ({ route, navigation }) => {
     const continuar = () => {
         console.log("continuar")
         anuncio.valor = input;
-        if (input.length > 0) {
+
+        console.log(input.length)
+        console.log(anuncio.id)
+
+        if (input.length > 0 || anuncio.id) {
             navigation.navigate('AnunciarCep', { anuncio: anuncio, });
         } else {
             setIsMessageWarning(true)
@@ -38,8 +44,12 @@ const AnunciarValor = ({ route, navigation }) => {
     }
 
     useEffect(() => {
-        setInput(anuncio.valor)
-        if (anuncio) {
+        console.log("useEffect")
+
+        if (anuncio.id) {
+            var val = formatValor(anuncio.valor)
+            console.log(val)
+            setInput(val)
             setIsMessageWarning(false)
             setEnableButton(true)
         }
@@ -60,7 +70,7 @@ const AnunciarValor = ({ route, navigation }) => {
                 }]}>Qual valor pretende vender?</Text>
 
                 <View style={stylesCommon.action}>
-                <TextInputMask
+                    <TextInputMask
                         type={'money'}
                         options={{
                             precision: 2,
@@ -68,7 +78,7 @@ const AnunciarValor = ({ route, navigation }) => {
                             delimiter: '.',
                             unit: 'R$',
                             suffixUnit: ''
-                          }}
+                        }}
                         keyboardType="numeric"
                         onFocus={() => setIsFocused(true)}
                         selectionColor="#009387"
@@ -86,7 +96,7 @@ const AnunciarValor = ({ route, navigation }) => {
 
                 {isMessageWarning &&
                     <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={stylesCommon.errorMsg}>digite um valor 1válido</Text>
+                        <Text style={stylesCommon.errorMsg}>digite um valor válido</Text>
                     </Animatable.View>
                 }
 

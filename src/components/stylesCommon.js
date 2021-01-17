@@ -47,7 +47,8 @@ const stylesCommon = StyleSheet.create({
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10
+        borderRadius: 10,
+
     },
     button_text: {
         fontSize: 18,

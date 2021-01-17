@@ -1,20 +1,18 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StatusBar, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, StyleSheet, ScrollView } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from 'react-native-paper';
-import { SliderBox } from 'react-native-image-slider-box';
 import AwesomeLoading from 'react-native-awesome-loading';
 import { CommonActions } from '@react-navigation/native';
 
-import { enunsTipoAnuncio, enunsTipoCategoria } from '../../services/enuns'
 import { useAuth } from '../../contexts/auth';
 import { apiAnuncio } from '../../services/api';
 import stylesCommon from '../../components/stylesCommon'
 import { uploadImage } from '../../services/storageService';
+import ItemAnuncio from '../ItemAnuncio';
 import { useState } from 'react';
 
-const width = Dimensions.get('window').width * 0.9;
 
 const AnunciarConfirm = ({ route, navigation }) => {
     console.log('--- AnunciarConfirm --- ')
@@ -22,19 +20,27 @@ const AnunciarConfirm = ({ route, navigation }) => {
     const [isLoading, setIsLoading] = useState(false);
     const { user, _showAlert } = useAuth();
     const { anuncio } = route.params;
+    console.log("anuncio: ", anuncio.imagensDevice)
     const { colors } = useTheme();
 
     const onHandleSubmit = async () => {
-        const picsUrls = [];
-        await sendingImageArray(anuncio.images)
-            .then(urls => picsUrls.push(...urls))
-            .catch(err => console.log(err));
-        return (picsUrls);
+
+        console.log("onHaldleSubmit: ", anuncio.imagensDevice)
+
+        if (anuncio.imagensDevice) {
+            const picsUrls = [];
+            await sendingImageArray(anuncio.imagens)
+                .then(urls => picsUrls.push(...urls))
+                .catch(err => console.log(err));
+            return (picsUrls);
+        } else {
+            return (anuncio.imagens)
+        }
     };
 
-    const sendingImageArray = async (images) => {
+    const sendingImageArray = async (imagens) => {
         console.log('sendingImageArray')
-        return Promise.all(images.map(image => uploadImage(image.base64)));
+        return Promise.all(imagens.map(image => uploadImage(image.base64)));
     }
 
     const publicarAnuncio = () => {
@@ -42,6 +48,7 @@ const AnunciarConfirm = ({ route, navigation }) => {
         setIsLoading(true);
 
         const anuncioObject = {
+            id: null,
             titulo: '',
             descricao: '',
             tipo: '',
@@ -52,6 +59,7 @@ const AnunciarConfirm = ({ route, navigation }) => {
             imagens: []
         }
 
+        anuncioObject.id = anuncio.id;
         anuncioObject.titulo = anuncio.titulo;
         anuncioObject.descricao = anuncio.descricao;
         anuncioObject.tipo = anuncio.tipo;
@@ -61,29 +69,51 @@ const AnunciarConfirm = ({ route, navigation }) => {
 
         if (anuncio.valor == 0) {
             anuncioObject.valor = anuncio.valor
-        }else{
-            anuncioObject.valor = anuncio.valor.replace(/[^0-9,]*/g, '').replace(',', '.'); 
+        } else {
+            anuncioObject.valor = anuncio.valor.replace(/[^0-9,]*/g, '').replace(',', '.');
         }
-
 
         onHandleSubmit()
             .then((picsUrls) => {
+
+                console.log
+
                 anuncioObject.imagens = picsUrls;
-                apiAnuncio.post('/anuncios', anuncioObject)
-                    .then(() => {
-                        setIsLoading(false);
-                        _showAlert('success', 'Anúncio publicado com sucesso', '', 3000);
-                        navigation.dispatch(CommonActions.reset({
-                            index: 1, routes: [
-                                { name: 'Anunciar' },
-                                { name: 'MeusAnuncios' },
-                            ],
-                        }));
-                    })
-                    .catch((error) => {
-                        setIsLoading(false);
-                        _showAlert('error', 'Ooops!', `Algo deu errado. ` + error, 7000);
-                    });
+
+                var method = ''
+                if (anuncioObject.id) {
+                    apiAnuncio.put('/anuncios', anuncioObject)
+                        .then(() => {
+                            setIsLoading(false);
+                            _showAlert('success', 'Anúncio alterado com sucesso', '', 3000);
+                            navigation.dispatch(CommonActions.reset({
+                                index: 1, routes: [
+                                    { name: 'MeusAnuncios' },
+                                    { name: 'MeusAnuncios' },
+                                ],
+                            }));
+                        })
+                        .catch((error) => {
+                            setIsLoading(false);
+                            _showAlert('error', 'Ooops!', `Algo deu errado. ` + error, 7000);
+                        });
+                } else {
+                    apiAnuncio.post('/anuncios', anuncioObject)
+                        .then(() => {
+                            setIsLoading(false);
+                            _showAlert('success', 'Anúncio publicado com sucesso', '', 3000);
+                            navigation.dispatch(CommonActions.reset({
+                                index: 1, routes: [
+                                    { name: 'Anunciar' },
+                                    { name: 'MeusAnuncios' },
+                                ],
+                            }));
+                        })
+                        .catch((error) => {
+                            setIsLoading(false);
+                            _showAlert('error', 'Ooops!', `Algo deu errado. ` + error, 7000);
+                        });
+                }
             })
             .catch(error => {
                 setIsLoading(false);
@@ -115,56 +145,7 @@ const AnunciarConfirm = ({ route, navigation }) => {
                             color: colors.text
                         }]}>Confirme os dados do seu anúncio</Text>
 
-                        <View style={styles.imageViewContainer}>
-                            <SliderBox resizeMethod={'resize'}
-                                images={anuncio.images}
-                                parentWidth={width}
-                                ImageComponentStyle={{ height: 300, width: width }} />
-                        </View>
-
-                        <View style={[stylesCommon.text_footer, { marginTop: 15 }]} >
-                            <Text style={[styles.text_titulo_detail]}>Titulo</Text>
-                            <Text style={[stylesCommon.text_footer, {
-                                color: colors.text
-                            }]}>{anuncio.titulo}</Text>
-                        </View>
-
-                        <View style={[stylesCommon.text_footer, { marginTop: 15 }]} >
-                            <Text style={[styles.text_titulo_detail]}>Descrição</Text>
-                            <Text style={[stylesCommon.text_footer, {
-                                color: colors.text
-                            }]}>{anuncio.descricao}</Text>
-                        </View>
-
-                        <View style={[stylesCommon.text_footer, { marginTop: 15 }]} >
-                            <Text style={[styles.text_titulo_detail]}>Categoria</Text>
-                            <Text style={[stylesCommon.text_footer, {
-                                color: colors.text
-                            }]}>{enunsTipoCategoria(anuncio.categoria)}</Text>
-                        </View>
-
-                        <View style={[stylesCommon.text_footer, { marginTop: 15 }]} >
-                            <Text style={[styles.text_titulo_detail]}>Tipo</Text>
-                            <Text style={[stylesCommon.text_footer, {
-                                color: colors.text
-                            }]}>{enunsTipoAnuncio(anuncio.tipo)}</Text>
-                        </View>
-
-                        {anuncio.tipo == 'VENDA' &&
-                            <View style={[stylesCommon.text_footer, { marginTop: 15 }]} >
-                                <Text style={[styles.text_titulo_detail]}>Valor</Text>
-                                <Text style={[stylesCommon.text_footer, {
-                                    color: colors.text
-                                }]}>{anuncio.valor}</Text>
-                            </View>}
-
-                        <View style={[stylesCommon.text_footer, { marginTop: 15 }]} >
-                            <Text style={[styles.text_titulo_detail]}>CEP</Text>
-                            <Text style={[stylesCommon.text_footer, {
-                                color: colors.text
-                            }]}>{anuncio.cep}</Text>
-                        </View>
-
+                        <ItemAnuncio anuncio={anuncio} />
 
                         <View style={stylesCommon.button}>
                             <TouchableOpacity
@@ -175,9 +156,15 @@ const AnunciarConfirm = ({ route, navigation }) => {
                                     colors={['#08d4c4', '#01ab9d']}
                                     style={stylesCommon.button_styte}
                                 >
-                                    <Text style={[stylesCommon.button_text, {
-                                        color: '#fff'
-                                    }]}>Publicar</Text>
+                                    {!anuncio.id ?
+                                        <Text style={[stylesCommon.button_text, {
+                                            color: '#fff'
+                                        }]}>Publicar</Text>
+                                        :
+                                        <Text style={[stylesCommon.button_text, {
+                                            color: '#fff'
+                                        }]}>Alterar</Text>
+                                    }
                                 </LinearGradient>
                             </TouchableOpacity>
                         </View>
@@ -206,19 +193,3 @@ const AnunciarConfirm = ({ route, navigation }) => {
 };
 
 export default AnunciarConfirm;
-
-const styles = StyleSheet.create({
-    text_titulo_detail: {
-        color: '#363636',
-        fontWeight: 'bold',
-        textAlign: 'left',
-        fontSize: 18
-
-    },
-    imageViewContainer: {
-        margin: 15,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-})

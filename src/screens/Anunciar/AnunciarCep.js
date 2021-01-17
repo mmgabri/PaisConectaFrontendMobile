@@ -40,7 +40,7 @@ const AnunciarCep = ({ route, navigation }) => {
 
     useEffect(() => {
         setInput(anuncio.cep)
-        if (anuncio) {
+        if (anuncio.id) {
             setIsMessageWarning(false)
             setEnableButton(true)
         }

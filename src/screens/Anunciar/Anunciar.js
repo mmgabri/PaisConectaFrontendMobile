@@ -16,7 +16,7 @@ const Anunciar = ({ navigation }) => {
   const { colors } = useTheme();
 
   var anuncio = {
-    id: '',
+    id: null,
     titulo: '',
     descricao: '',
     tipo: '',
@@ -24,7 +24,8 @@ const Anunciar = ({ navigation }) => {
     valor: 0,
     cep: '',
     idUsuario: '',
-    images: []
+    imagens: [],
+    imagensDevice: true
 }
 
   return (
@@ -140,4 +141,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold'
   }
+
 });
